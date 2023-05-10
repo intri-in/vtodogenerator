@@ -1,4 +1,3 @@
-import { varNotEmpty } from '@/helpers/general';
 import * as moment from 'moment';
 
 class VTodoGenerator{
@@ -15,6 +14,18 @@ class VTodoGenerator{
             throw new Error("No valid task object provided.")
         }
         this.oldData= null
+    }
+
+    varNotEmpty(variable)
+    {
+
+        if(variable!=null && variable!=undefined)
+        {
+            return true
+        }else
+        {
+            return false
+        }
     }
 
     generate(skipVCALENDAR=false)
@@ -125,7 +136,7 @@ class VTodoGenerator{
                 {
                     for(const i in this.relatedto)
                     {
-                        if(varNotEmpty(this.relatedto[i].params) && varNotEmpty(this.relatedto[i].params.RELTYPE) && varNotEmpty(this.relatedto[i].val)){
+                        if(this.varNotEmpty(this.relatedto[i].params) && this.varNotEmpty(this.relatedto[i].params.RELTYPE) && this.varNotEmpty(this.relatedto[i].val)){
                             var relatedOutput="RELATED-TO;RELTYPE="+this.relatedto[i].params.RELTYPE.toString().toUpperCase()+":"+this.relatedto[i].val+"\n"
                             finalVTODO+=relatedOutput
     
