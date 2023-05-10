@@ -1,0 +1,27 @@
+{
+  "name": "vtodogenerator",
+  "version": "1.0.0",
+  "description": " A library to generate VTODO compatible with RFC5545 ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intri-in/vtodogenerator.git"
+  },
+  "keywords": [
+    "VTODO",
+    "CalDAV",
+    "RFC5545"
+  ],
+  "author": "Intri",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/intri-in/vtodogenerator/issues"
+  },
+  "homepage": "https://github.com/intri-in/vtodogenerator#readme",
+  "dependencies": {
+    "moment": "2.29.4"
+  }
+}
