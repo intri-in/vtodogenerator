@@ -84,8 +84,8 @@ As of now, VTODOGenerator supports the following fields:
 | resources| Array of string |Resources/equipment required for the task.| RESOURCES|
 | rrule| Object. <br /> <br />See [relevant](#rrule) section for more details. |Recurrence rule for the task.| RRULE|
 | url| string |Any URL associated with the task.| URL|
-| recurrences| Array of Object|An array of series of task objects, in case of recurring tasks. See [relevant](#recurrences) section.| URL|
-| recurrenceid| string |Recurrence ID of the task. This is used to identify tasks in a recurrence set. See [relevant](#recurrences) section.| |
+| recurrences| Array of Object|An array of series of task objects, in case of recurring tasks. See [relevant](#recurrences) section.| |
+| recurrenceid| string |Recurrence ID of the task. This is used to identify tasks in a recurrence set. See [relevant](#recurrences) section.|RECURRENCE-ID |
 
 ## Fields
 
