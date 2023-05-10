@@ -57,7 +57,7 @@ class VTodoGenerator{
         var finalVTODO=""
         if(skipVCALENDAR==null || skipVCALENDAR==undefined || skipVCALENDAR==false)
         {
-            finalVTODO+="BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Manage my Damn Life Tasks v0.1\n"
+            finalVTODO+="BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//VTODOGENERATOR v1.0.0\n"
 
         }
         finalVTODO +="BEGIN:VTODO\nUID:"+uid+"\n"
