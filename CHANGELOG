@@ -1,3 +1,11 @@
+v.1.1.1
+    - Yet another patch.
+    - Added .npmignore
+    
+v.1.1.0
+    - Fixed import not working. 
+    - Version number bumped.
+    
 v1.0.3
     - varNotEmpty defined.
 
