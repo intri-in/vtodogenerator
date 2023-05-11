@@ -19,6 +19,9 @@ You can install it via:
 npm i moment --save
 ```
 
+# Documentation
+
+Full documentation is also available [here](https://vtodogenerator.readthedocs.io/en/latest/).
 
 # Usage
 
@@ -217,7 +220,7 @@ var todoData = {
     UNTIL: 03/01/2024,
     },
     recurrence:[
-        {
+        "2023-12-31": {
             description: "Don't drink too much",
             recurrenceid: "20231231T000000"
         }
@@ -227,12 +230,12 @@ var todoData = {
 }
 ```
 
-On Dec 31, 2023, the task instance will show up with the description "Don't drink too much".
+On Dec 31, 2023, the task instance will show up with the description "Don't drink too much" (on most clients).
 
 
 ## Functions
 
-## generate(skipVCALENDAR)
+### generate(skipVCALENDAR)
 
 Generates the VTODO.
 
