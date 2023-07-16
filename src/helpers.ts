@@ -12,3 +12,4 @@ export function convertToTimeZone(date: string, tz:string){
     var convertedTime  = moment.tz(date, tz);
     return convertedTime
 }
+

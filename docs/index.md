@@ -40,7 +40,7 @@ var todoData = {
 Initialise class instance, and generate todo.
 
 ```
-var todo = new VTodoGenerator(todoData)
+var todo = new VTodoGenerator(todoData, {strict: true})
 console.log(todo.generate())
 
 //Sample Output
@@ -233,6 +233,28 @@ On Dec 31, 2023, the task instance will show up with the description "Don't drin
 
 
 ## Functions
+
+### constructor(todoObject, options)
+
+Initializes the object. Additional options can be specified using the options variable.
+
+**Parameters**
+
+| name| Type | Required| Description|
+|---|---|---|---|
+|todoObject| object| Yes | Data to generate the VTODO. Refer to [guide](#guide) section for all supported fields.|  
+|options| object| No | 
+
+**Options**
+
+**strict**
+
+Specifies whether the inputs must be checked strictly.
+
+Example usage:
+```
+var todo = new VTodoGenerator(todoData, {strict: false}) 
+```
 
 ### generate(skipVCALENDAR)
 

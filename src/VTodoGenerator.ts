@@ -1,5 +1,5 @@
 import moment from "moment-timezone"
-import { inputObj, relatedToType, rruleType } from "./typeDefinitions"
+import { inputObj, optionsType, relatedToType, rruleType } from "./typeDefinitions"
 import { isValidInput, isValidTimezone } from "./inputValidations"
 import { generateNewUID } from "./helpers"
 
@@ -30,9 +30,10 @@ class VTodoGenerator{
     recurrences?: inputObj[]
     tz?:string
 
-    constructor(todoObject: inputObj)
+    constructor(todoObject: inputObj, options?: optionsType)
     {
-        if(isValidInput(todoObject)){
+        var enforceStrict= (options!=undefined && options!=null && options.strict!=undefined) ?  options.strict : true
+        if(isValidInput(todoObject, enforceStrict)){
             this.due = todoObject.due!=undefined? todoObject.due: undefined
             this.dtstamp=todoObject.dtstamp!=undefined? todoObject.dtstamp: undefined
             this.uid= todoObject.uid!=undefined? todoObject.uid: undefined
@@ -402,7 +403,7 @@ class VTodoGenerator{
 
     static getValidStatusValues()
     {
-       var validvalues=[ "NEEDS-ACTION", "COMPLETED", "IN-PROCESS", "CANCELLED"]
+       var validvalues=[ "","NEEDS-ACTION", "COMPLETED", "IN-PROCESS", "CANCELLED"]
 
        return validvalues
     }

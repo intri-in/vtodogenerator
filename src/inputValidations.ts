@@ -10,8 +10,11 @@ export function isValidTimezone(timezone: string | undefined): boolean {
     return !!moment.tz.zone(timezone) 
 }
 
-export function isValidInput(todoObject: inputObj): boolean{
+export function isValidInput(todoObject: inputObj, enforceStrict?): boolean{
 
+    if(enforceStrict==false){
+        return true
+    }
     if(("summary" in todoObject)==false || (("summary" in todoObject) && todoObject.summary.trim()=="")){
       
       if(!('recurrenceid' in todoObject)){
@@ -20,7 +23,8 @@ export function isValidInput(todoObject: inputObj): boolean{
       }  
     }
 
-    if("due" in todoObject){
+    if(("due" in todoObject) ){
+        
         //Check if due is a valid date.
         var parsedDue = moment(todoObject.due)
         if(!parsedDue.isValid()){
@@ -28,7 +32,7 @@ export function isValidInput(todoObject: inputObj): boolean{
         }
     }
 
-    if("dtstamp" in todoObject){
+    if("dtstamp" in todoObject ){
         var parsedDate = moment(todoObject.dtstamp)
         if(!parsedDate.isValid()){
             throw new Error("Dtstamp must be in ISO Date format.")

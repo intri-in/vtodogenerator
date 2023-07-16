@@ -1,14 +1,12 @@
 {
   "name": "vtodogenerator",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": " A library to generate VTODO compatible with RFC5545",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "type-check": "tsc --noEmit",
     "test": "jest",
-    "build": "npm run build:types && npm run build:js",
-    "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline"
+    "build": "tsc --build"
   },
   "repository": {
     "type": "git",
