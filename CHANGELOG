@@ -1,3 +1,13 @@
+v2.0.0
+    - Changed to typescript 
+        - Major rewrite
+    - Bumped version number to 2.0.0
+    - Added the timezone library as a dependency -- to add timezone support
+    - Added jest as a testing library
+        - Bunch of tests added
+        - Added dev dependencies for testing
+    - Minor changes to docs.
+    
 v.1.1.1
     - Yet another patch.
     - Added .npmignore
