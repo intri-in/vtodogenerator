@@ -1,3 +1,8 @@
+v2.0.2
+    - Updated readme
+v2.0.1
+    - Fixed the build.
+    - Added option to skip strict checking of input.
 v2.0.0
     - Changed to typescript 
         - Major rewrite
