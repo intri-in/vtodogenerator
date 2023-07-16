@@ -1,8 +1,71 @@
-import moment from "moment"
+import moment from "moment-timezone"
+import { inputObj, relatedToType, rruleType } from "./typeDefinitions"
+import { isValidInput, isValidTimezone } from "./inputValidations"
+import { generateNewUID } from "./helpers"
+
 class VTodoGenerator{
 
-    constructor(todoObject)
+    due?: string
+    dtstamp? : string
+    uid?: string
+    categories?: string[] 
+    completed?: string
+    summary: string
+    created?:string
+    completion?:string | number
+    status?: string 
+    relatedto?: string | relatedToType | relatedToType[]
+    priority?: string | number
+    recurrenceid?: string 
+    description?: string
+    start?: string
+    class?: string
+    rrule?: rruleType
+    geo?: string
+    location?: string
+    organizer?:string
+    sequence?:number | string
+    resources?: string | string[]
+    url?:string
+    recurrences?: inputObj[]
+    tz?:string
+
+    constructor(todoObject: inputObj)
     {
+        if(isValidInput(todoObject)){
+            this.due = todoObject.due!=undefined? todoObject.due: undefined
+            this.dtstamp=todoObject.dtstamp!=undefined? todoObject.dtstamp: undefined
+            this.uid= todoObject.uid!=undefined? todoObject.uid: undefined
+            this.categories = todoObject.categories!=undefined? todoObject.categories: undefined 
+            this.completed=todoObject.completed!=undefined? todoObject.completed: undefined 
+            this.summary=todoObject.summary
+            this.created=todoObject.created!=undefined? todoObject.created: undefined
+            this.completion=todoObject.completion!=undefined? todoObject.completion: undefined
+            this.status=todoObject.status!=undefined? todoObject.status: undefined
+            this.relatedto=todoObject.relatedto!=undefined? todoObject.relatedto: undefined
+            this.priority=todoObject.priority!=undefined? todoObject.priority: undefined
+            this.priority=todoObject.priority!=undefined? todoObject.priority: undefined
+            this.recurrenceid=todoObject.recurrenceid!=undefined? todoObject.recurrenceid: undefined
+            this.description=todoObject.description!=undefined? todoObject.description: undefined
+            this.start=todoObject.start!=undefined? todoObject.start: undefined
+            this.class=todoObject.class!=undefined? todoObject.class: undefined
+            this.rrule=todoObject.rrule!=undefined? todoObject.rrule: undefined
+            this.geo=todoObject.geo!=undefined? todoObject.geo: undefined
+            this.location=todoObject.location!=undefined? todoObject.location: undefined
+            this.organizer=todoObject.organizer!=undefined? todoObject.organizer: undefined
+            this.sequence=todoObject.sequence!=undefined? todoObject.sequence: undefined
+            this.resources=todoObject.resources!=undefined? todoObject.resources: undefined
+            this.url=todoObject.url!=undefined? todoObject.url: undefined
+            this.recurrences=todoObject.recurrences!=undefined? todoObject.recurrences: undefined
+            this.tz=todoObject.tz!=undefined? todoObject.tz: undefined
+
+        
+
+        }else{
+            throw new Error("No valid task object provided.")
+
+        }
+        /*
         if(todoObject!=null && Object.keys(todoObject).length>0)
         {
             for(const key in todoObject)
@@ -11,11 +74,12 @@ class VTodoGenerator{
             }
         }else{
             throw new Error("No valid task object provided.")
+
         }
-        this.oldData= null
+        */
     }
 
-    varNotEmpty(variable)
+    varNotEmpty(variable: any)
     {
 
         if(variable!=null && variable!=undefined)
@@ -29,7 +93,7 @@ class VTodoGenerator{
 
     generate(skipVCALENDAR=false)
     {
-        var dtstamp=""
+        var dtstamp: string| null=""
         if(this.dtstamp!=null && this.dtstamp!="")
         {
             dtstamp=this.getISO8601Date(this.dtstamp)
@@ -47,13 +111,13 @@ class VTodoGenerator{
         }
         else
         {
-            uid=this.generateNewUID()
+            uid=generateNewUID()
         }
         if(this.categories!=null && Array.isArray(this.categories) && this.categories.length>0)
         {
-            for (const i in this.categories)
+            for (let i =0; i< this.categories.length; i++)
             {
-                if(i!=(this.categories.length-1))
+                if(i!==(this.categories.length-1)) 
                 {
                     categories+= this.categories[i]+","
 
@@ -71,11 +135,11 @@ class VTodoGenerator{
 
         }
         finalVTODO +="BEGIN:VTODO\nUID:"+uid+"\n"
-        finalVTODO +="DTSTAMP:"+dtstamp+"\n"
+        finalVTODO += !isValidTimezone(this.tz) ? "DTSTAMP:"+dtstamp+"\n" :`DTSTAMP;TZID=${this.tz}:`+dtstamp+"\n"  
 
         if(this.created!=null && this.created!="")
         {
-            finalVTODO +="CREATED:"+this.getISO8601Date(this.created)+"\n"
+            finalVTODO += isValidTimezone(this.tz) ?`CREATED;TZID=${this.tz}:`+this.getISO8601Date(this.created)+"\n":"CREATED:"+this.getISO8601Date(this.created)+"\n"
         }  
 
         if(this.summary!=null && this.summary!=""){
@@ -85,6 +149,7 @@ class VTodoGenerator{
     
         if(this.due!=null && this.due!="")
         {
+            //finalVTODO += !isValidTimezone(this.tz) ? "DUE:"+this.getISO8601Date(this.due)+"\n" : `DUE;TZID=${this.tz}:`+this.getISO8601Date(this.due)+"\n" 
             finalVTODO +="DUE:"+this.getISO8601Date(this.due)+"\n" 
         }
 
@@ -104,8 +169,8 @@ class VTodoGenerator{
             }
 
         }else{
-            if(this.status!=null&&this.status!=""&& this.statusIsValid(this.status)){
-                finalVTODO +="STATUS:"+this.status+"\n" 
+            if(this.status!=null&&this.status!=""&& VTodoGenerator.statusIsValid(this.status)){
+                finalVTODO +="STATUS:"+this.status.toUpperCase()+"\n" 
     
             }
     
@@ -142,8 +207,10 @@ class VTodoGenerator{
                         }
                     }
                 }else{
-                    var relatedOutput="RELATED-TO;RELTYPE="+this.relatedto.params.RELTYPE.toString().toUpperCase()+":"+this.relatedto.val+"\n"
-                    finalVTODO+=relatedOutput
+                        var relatedOutput="RELATED-TO;RELTYPE="+this.relatedto.params.RELTYPE.toString().toUpperCase()+":"+this.relatedto.val+"\n"
+                        finalVTODO+=relatedOutput
+    
+                   
                 }
             }
 
@@ -163,7 +230,8 @@ class VTodoGenerator{
         }
         if(this.start!=null && this.start!="")
         {
-            finalVTODO +="DTSTART:"+this.getISO8601Date(this.start)+"\n"
+            //finalVTODO +="DTSTART:"+this.getISO8601Date(this.start)+"\n"
+            finalVTODO += isValidTimezone(this.tz)? `DTSTART;TZID=${this.tz}:`+this.getISO8601Date(this.start)+"\n": "DTSTART:"+this.getISO8601Date(this.start)+"\n"
 
         }
 
@@ -189,8 +257,10 @@ class VTodoGenerator{
 
         }
         */
-        finalVTODO +="LAST-MODIFIED:"+this.getISO8601Date(Date.now())+"\n"
         
+        //finalVTODO +="LAST-MODIFIED:"+this.getISO8601Date(Date.now())+"\n"
+        finalVTODO += isValidTimezone(this.tz) ? `LAST-MODIFIED;TZID=${this.tz}:`+this.getISO8601Date(Date.now())+"\n":"LAST-MODIFIED:"+this.getISO8601Date(Date.now())+"\n"
+
 
         if(this.location!=null && this.location!="" && this.location!=undefined)
         {
@@ -203,9 +273,9 @@ class VTodoGenerator{
 
         }
 
-        if(this.sequence!=null && this.sequence!="" && this.sequence!=undefined)
+        if(this.sequence!=null && this.sequence!=undefined)
         {
-            finalVTODO +="SEQUENCE:"+parseInt(this.sequence)+1+"\n"
+            finalVTODO +="SEQUENCE:"+this.sequence+1+"\n"
 
         }
 
@@ -213,31 +283,38 @@ class VTodoGenerator{
         {
             var resourcesOutput="RESOURCES:"
 
-            for(const i in this.resources)
+            for(let i=0; i< this.resources.length; i++)
             {
-                if(i!=0)
+
+                if(i!==(this.resources.length-1)) 
                 {
-                    resourcesOutput+=","
+                    resourcesOutput+= this.resources[i]+","
+
                 }
-                resourcesOutput+=this.resources[i]
+                else{
+                    resourcesOutput+= this.resources[i]
+
+                }
+
+
             }
             finalVTODO +=resourcesOutput+"\n"
 
 
         }
-        if(this.rrule!=null && this.rrule!="" && this.rrule["FREQ"]!="" && this.rrule["FREQ"]!=null && this.rrule["INTERVAL"]!="" && this.rrule.INTERVAL!="" )
+        if(this.rrule!=null && this.rrule["FREQ"]!="" && this.rrule["FREQ"]!=null && this.rrule["INTERVAL"]!="" && this.rrule.INTERVAL!="" )
         {
 
-            var rruleOutput="RRULE:FREQ="+this.rrule.FREQ+";INTERVAL="+this.rrule.INTERVAL+";"
+            var rruleOutput="RRULE:FREQ="+this.rrule.FREQ+";INTERVAL="+this.rrule.INTERVAL
 
-            if(this.rrule.COUNT!=null && this.rrule.COUNT!="")
+            if(this.rrule.COUNT!=null )
             {
-                rruleOutput+="COUNT="+this.rrule.COUNT+";"
+                rruleOutput+=";COUNT="+this.rrule.COUNT+";"
             }
 
             if(this.rrule.UNTIL!="" && this.rrule.UNTIL!=null)
             {
-                rruleOutput+="UNTIL="+this.getISO8601Date(this.rrule.UNTIL, true)+";"
+                rruleOutput+=";UNTIL="+this.getISO8601Date(this.rrule.UNTIL, true)
 
             }
             finalVTODO +=rruleOutput+"\n"
@@ -278,7 +355,7 @@ class VTodoGenerator{
 
 
         finalVTODO +="END:VTODO\n"
-        if(this.recurrences!=null)
+        if(this.recurrences!=null && Array.isArray(this.recurrences))
         {
            
             for(const i in this.recurrences)
@@ -301,14 +378,17 @@ class VTodoGenerator{
         return finalVTODO
     }
 
-    getISO8601Date(date, skipTime)
+    getISO8601Date(date: string | number, skipTime?: boolean)
     {
         var toReturn = ""
+        var dateinTimezone = date
+
         if(date!=null)
         {
-            var dueDateUnix= moment(date).unix()*1000;
+            //var dueDateUnix= this.tz==undefined ?  moment(date).unix()*1000 : moment(date).tz(this.tz).unix()*1000;
+            var dueDateUnix=moment(date).unix()*1000
             toReturn =  moment(dueDateUnix).format('YYYYMMDD');
-            if(skipTime==null || skipTime!="null" && skipTime==false)
+            if(skipTime==null || skipTime==false)
             {
                 toReturn +=  "T"+moment(dueDateUnix).format('HHmmss');
 
@@ -319,12 +399,6 @@ class VTodoGenerator{
         }
         return toReturn
     }
-    generateNewUID()
-    {
-        var crypto = require("crypto");
-        var id = crypto.randomBytes(32).toString('hex');
-        return id+"@intri"
-    }
 
     static getValidStatusValues()
     {
@@ -333,25 +407,22 @@ class VTodoGenerator{
        return validvalues
     }
 
-    statusIsValid(status)
+    static statusIsValid(status: string | undefined)
     {
-        var validStatuses = this.constructor.getValidStatusValues()
+        if(status==undefined){
+            return false
+        }
+        var validStatuses = VTodoGenerator.getValidStatusValues()
         var found = false
         for (let i=0; i<validStatuses.length; i++)
         {
-            if(validStatuses[i]==status)
+            if(validStatuses[i].toLowerCase()==status.toLowerCase())
             {
                 return true
             }
         }
 
         return found
-
-    }
-
-    setOldData(oldData)
-    {
-        this.oldData = oldData
 
     }
 
