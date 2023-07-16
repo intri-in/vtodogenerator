@@ -39,3 +39,7 @@ export interface rruleType{
     UNTIL?: string
     COUNT?: number
 }
+
+export interface optionsType{
+    strict: boolean
+}
