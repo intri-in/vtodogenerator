@@ -1,3 +1,5 @@
+v3.0.1
+    - Fix to docs.
 v3.0.0
     - Recurrence shouldn't be an Array 
         - Change breaks things because recurrence must be an object with the date as a key.
