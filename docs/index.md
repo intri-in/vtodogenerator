@@ -218,12 +218,12 @@ var todoData = {
     INTERVAL: 1,
     UNTIL: 2024-01-03,
     },
-    recurrences:[
+    recurrences:{
          "2023-12-31": {
             description: "Don't drink too much",
             recurrenceid: "20231231T000000"
         }
-    ]
+    
     }
 
 }
