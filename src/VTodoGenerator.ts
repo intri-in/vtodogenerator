@@ -27,12 +27,14 @@ class VTodoGenerator{
     sequence?:number | string
     resources?: string | string[]
     url?:string
-    recurrences?: inputObj[]
+    recurrences?: {}
     tz?:string
+    enforceStrict?:boolean
 
     constructor(todoObject: inputObj, options?: optionsType)
     {
         var enforceStrict= (options!=undefined && options!=null && options.strict!=undefined) ?  options.strict : true
+        this.enforceStrict= enforceStrict
         if(isValidInput(todoObject, enforceStrict)){
             this.due = todoObject.due!=undefined? todoObject.due: undefined
             this.dtstamp=todoObject.dtstamp!=undefined? todoObject.dtstamp: undefined
@@ -356,13 +358,13 @@ class VTodoGenerator{
 
 
         finalVTODO +="END:VTODO\n"
-        if(this.recurrences!=null && Array.isArray(this.recurrences))
+        if(this.recurrences!=null)
         {
            
             for(const i in this.recurrences)
             {
                 //console.log(this.recurrences[i])
-                var newVTODO = new VTodoGenerator(this.recurrences[i])
+                var newVTODO = new VTodoGenerator(this.recurrences[i], {strict: this.enforceStrict})
                 finalVTODO += newVTODO.generate(true)
             }
            
