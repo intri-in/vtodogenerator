@@ -46,7 +46,7 @@ test('Recurrence test: Must generate the todo', () => {
 
     var todo = new VTodoGenerator(todoData)
     var generatedTodo = todo.generate()
-    console.log("generatedTodo", generatedTodo,)
+    //console.log("generatedTodo", generatedTodo,)
     const  parsedData = ical.parseICS(generatedTodo);
     for (let k in parsedData) {
         for(let i in parsedData[k].recurrences){

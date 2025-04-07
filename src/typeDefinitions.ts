@@ -23,6 +23,8 @@ export interface inputObj {
     url?:string
     recurrences?: inputObj[]
     tz?:string
+    valarms?: vAlarm[]
+
 
 
 }
@@ -42,4 +44,31 @@ export interface rruleType{
 
 export interface optionsType{
     strict: boolean
+}
+
+export interface vAlarm{
+    action: string;
+    trigger: vAlarmTrigger;
+    description?: string;
+    repeat?: vAlarmRepeat;
+    summary?:string
+    attendees?:attendeeType[]
+}
+/**
+ *
+ */
+export interface vAlarmTrigger{
+    isRelated: boolean;
+    value: string | number ;
+    relatedTo?: string;
+}
+
+export interface vAlarmRepeat{
+    repeat: number;
+    duration: number;
+}
+
+export interface attendeeType{
+    commonName: string,
+    email:string
 }
