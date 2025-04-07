@@ -238,6 +238,7 @@ On Dec 31, 2023, the task instance will show up with the description "Don't drin
 This field holds alarm(s) for the VTODO. It must be an array object, with the following fields:
 
 |Name| Type| Required| Description|
+|---|---|---|---|
 |action|string|Yes| Can be either "display", "email," or "audio."|
 |trigger|string|yes| This field contains the trigger for the alarm. See [relevant](#trigger) section for more information.|
 |description|string| Maybe| This field contains desription of the alarm and it is required if the action type is either "diplay" or "email." It is used as the email body in case the action is "email."|
@@ -251,6 +252,7 @@ This field if used to include the people that must be notified by email, in case
 It must be an array of objects with the following fields:
 
 |Name| Type| Required| Description|
+|---|---|---|---|
 |commonName|string|Yes| Name of the attendee.|
 |email|string|Yes| Email of the attendee.|
 
@@ -259,6 +261,7 @@ It must be an array of objects with the following fields:
 Trigger field denotes when the Alarm will be displayed. It can either be a specific date & time, or it can be relative to the task's start of end. The Trigger object must have the following fields:
 
 |Name| Type| Required| Description|
+|---|---|---|---|
 |isRelated|boolean|Yes| Specifies whether you are trying to set the alarm relative to start/end of the task or using a particular date for the alarm. Set to *true* if you want to have an alarm relative to start or the end of the task.|
 |value|string or number |Yes| In case the alarm is relative (i.e. isrelated is set to *true*) the value field must contain the exact date and time when the alarm is triggered. In case the alarm is relative to start/end, it must contain the time period (in seconds) relative to the start/end when it must trigger. See the examples for more information.|
 |relatedTo|string|Maybe| If the isRelated flag is set to *true*, this field must be set. Could be either "start" or "end"|
