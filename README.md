@@ -88,6 +88,7 @@ As of now, VTODOGenerator supports the following fields:
 | tz| string |Timezone.| TZID|
 | recurrences| Array of Object|An array of series of task objects, in case of recurring tasks. See [relevant](#recurrences) section.| |
 | recurrenceid| string |Recurrence ID of the task. This is used to identify tasks in a recurrence set. See [relevant](#recurrences) section.|RECURRENCE-ID |
+| valarms| string |Alarm array for the tasks. See [relevant](#valarms) secion.| VALARM|
 
 ## Fields
 
@@ -189,7 +190,7 @@ Recurrences holds other tasks in a recurring series.
 Take an example of a task that you define as:
 
 ```
-var todoData = { 
+const todoData = { 
     uid: "primary-task-uid" 
     summary: "Sample Task", 
     categories: "InProgress",  
@@ -208,7 +209,7 @@ This task will be repeated daily, until Jan 03, 2024, starting from April 03, 20
 Let's say you want to edit an instance of this series (eg. the task that will occur on Dec 31, 2023), you will need to define this task as:
 
 ```
-var todoData = { 
+const todoData = { 
     uid: "primary-task-uid" 
     summary: "Sample Task", 
     categories: "InProgress",  
@@ -218,18 +219,87 @@ var todoData = {
     INTERVAL: 1,
     UNTIL: 2024-01-03,
     },
-    recurrences:[
+    recurrences:{
          "2023-12-31": {
             description: "Don't drink too much",
             recurrenceid: "20231231T000000"
         }
-    ]
+    }
     }
 
 }
 ```
 
 On Dec 31, 2023, the task instance will show up with the description "Don't drink too much" (on most clients).
+
+
+### Valarms
+
+This field holds alarm(s) for the VTODO. It must be an array object, with the following fields:
+
+|Name| Type| Required| Description|
+|---|---|---|---|
+|action|string|Yes| Can be either "display", "email," or "audio."|
+|trigger|string|yes| This field contains the trigger for the alarm. See [relevant](#trigger) section for more information.|
+|description|string| Maybe| This field contains desription of the alarm and it is required if the action type is either "diplay" or "email." It is used as the email body in case the action is "email."|
+|attendes|Object Array|Maybe|Required if the action type is "email." See [relevant](#attendees) section for more information. |
+|summary|string|Maybe|Required if the action type is "email." It is used as the subject line for the email sent to the attendees.|
+
+#### Attendees
+
+This field if used to include the people that must be notified by email, in case the action "email" is used in the VALARM.
+
+It must be an array of objects with the following fields:
+
+|Name| Type| Required| Description|
+|---|---|---|---|
+|commonName|string|Yes| Name of the attendee.|
+|email|string|Yes| Email of the attendee.|
+
+#### Trigger
+
+Trigger field denotes when the Alarm will be displayed. It can either be a specific date & time, or it can be relative to the task's start/end. The Trigger object must have the following fields:
+
+|Name| Type| Required| Description|
+|---|---|---|---|
+|isRelated|boolean|Yes| Specifies whether you are trying to set the alarm relative to start/end of the task or using a particular date for the alarm. Set to *true* if you want to have an alarm relative to start or the end of the task.|
+|value|string or number |Yes| In case the alarm is relative (i.e. isrelated is set to *true*) the value field must contain the exact date and time when the alarm is triggered. In case the alarm is relative to start/end, it must contain the time period (in seconds) relative to the start/end when it must trigger. See the examples for more information.|
+|relatedTo|string|Maybe| If the isRelated flag is set to *true*, this field must be set. Could be either "start" or "end"|
+
+Here are some examples:
+
+You can set the alarm to trigger on 22/04/2025 at 23:00 as follows:
+
+```
+trigger:{
+    isRelated: false,
+    value:"20250422T230000",
+}
+```
+
+The 'value' field is parsed by moment library, so you can set the date and time in any format that is supported by it.
+
+If you want to set the alarm to trigger 30 minutes (1800 seconds) before the start of the task, the trigger must look like:
+
+```
+trigger:{
+    isRelated: true,
+    value:-1800,
+    relatedTo:"start"
+}
+```
+
+Here's how you can set the alarm to trigger 5 mins after the end:
+
+```
+trigger:{
+    isRelated: true,
+    value:300,
+    relatedTo:"end"
+}
+```
+
+
 
 
 ## Functions

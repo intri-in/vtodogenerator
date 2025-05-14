@@ -1,7 +1,8 @@
 import moment from "moment-timezone"
-import { inputObj, optionsType, relatedToType, rruleType } from "./typeDefinitions"
+import { inputObj, optionsType, relatedToType, rruleType, vAlarm } from "./typeDefinitions"
 import { isValidInput, isValidTimezone } from "./inputValidations"
 import { generateNewUID } from "./helpers"
+import { parseVAlarmArray } from "./valarm"
 
 class VTodoGenerator{
 
@@ -29,6 +30,7 @@ class VTodoGenerator{
     url?:string
     recurrences?: {}
     tz?:string
+    valarms?: vAlarm[]
     enforceStrict?:boolean
 
     constructor(todoObject: inputObj, options?: optionsType)
@@ -61,6 +63,7 @@ class VTodoGenerator{
             this.url=todoObject.url!=undefined? todoObject.url: undefined
             this.recurrences=todoObject.recurrences!=undefined? todoObject.recurrences: undefined
             this.tz=todoObject.tz!=undefined? todoObject.tz: undefined
+            this.valarms=todoObject.valarms!=undefined ? todoObject.valarms: undefined
 
         
 
@@ -134,7 +137,7 @@ class VTodoGenerator{
         var finalVTODO=""
         if(skipVCALENDAR==null || skipVCALENDAR==undefined || skipVCALENDAR==false)
         {
-            finalVTODO+="BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//VTODOGENERATOR v1.0.0\n"
+            finalVTODO+="BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//VTODOGENERATOR v4.0.4\n"
 
         }
         finalVTODO +="BEGIN:VTODO\nUID:"+uid+"\n"
@@ -355,6 +358,16 @@ class VTodoGenerator{
         {
             finalVTODO +="RECURRENCE-ID:"+this.getISO8601Date(this.recurrenceid)+"\n"
         }
+        //Parse valarm input and generate VALARM components.
+        if(this.valarms && Array.isArray(this.valarms) && this.valarms.length>0){
+            const valarmOutput = parseVAlarmArray(this.valarms)
+            if(valarmOutput){
+
+                finalVTODO +=`${parseVAlarmArray(this.valarms)}`
+            }
+
+
+        }
 
 
         finalVTODO +="END:VTODO\n"
@@ -370,7 +383,7 @@ class VTodoGenerator{
            
 
         }
-
+      
         if(skipVCALENDAR==null || skipVCALENDAR==undefined || skipVCALENDAR==false)
         {
             finalVTODO+="END:VCALENDAR\n"
