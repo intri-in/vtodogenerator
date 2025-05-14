@@ -17,9 +17,10 @@ test('VALARM test', () => {
             action: "email",
             trigger: {
                 isRelated: true,
-                value: -300,
+                value: -10,
                 relatedTo: "end"
             },
+            advancedTriggerMode: false,
             description:"test1",
             summary:"Hey There",
             attendees:[{commonName:"test1",email:"test@example.com"},{
@@ -28,6 +29,7 @@ test('VALARM test', () => {
         },
         {
             action: "audio",
+            advancedTriggerMode: true,
             trigger: {
                 isRelated: false,
                 value: moment("22/04/2022 23:00", 'D/M/YYYY H:mm'),
@@ -56,7 +58,7 @@ test('VALARM test', () => {
      
     let todo = new VTodoGenerator(todoData)
     const generatedTodo = todo.generate()
-    // console.log(generatedTodo)
+    console.log(generatedTodo)
     const  parsedData = ical.parseICS(generatedTodo);
     // console.log(parsedData)
 

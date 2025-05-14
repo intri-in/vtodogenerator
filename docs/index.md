@@ -258,7 +258,7 @@ It must be an array of objects with the following fields:
 
 #### Trigger
 
-Trigger field denotes when the Alarm will be displayed. It can either be a specific date & time, or it can be relative to the task's start of end. The Trigger object must have the following fields:
+Trigger field denotes when the Alarm will be displayed. It can either be a specific date & time, or it can be relative to the task's start/end. The Trigger object must have the following fields:
 
 |Name| Type| Required| Description|
 |---|---|---|---|
@@ -285,17 +285,17 @@ If you want to set the alarm to trigger 30 minutes (1800 seconds) before the sta
 trigger:{
     isRelated: true,
     value:-1800,
-    relatedTo:"start",
+    relatedTo:"start"
 }
 ```
 
-Here's how you can set the alarm to trigger 5 mins after the end
+Here's how you can set the alarm to trigger 5 mins after the end:
 
 ```
 trigger:{
     isRelated: true,
     value:300,
-    relatedTo:"end",
+    relatedTo:"end"
 }
 ```
 

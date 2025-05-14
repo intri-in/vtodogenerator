@@ -17,7 +17,7 @@ export function parseVAlarmArray(valarms: vAlarm[] | any){
             throw new Error("Alarm doesn't have mandatory field 'action'. It will be ignored.")
         }
         if(!allowedVAlarmActions.includes(valarms[i].action.toLowerCase())){
-            throw new Error(`Invalid value '${valarms[i].action}' for action in alarm. It can only be 'action', 'display', or 'email.'`)
+            throw new Error(`Invalid value '${valarms[i].action}' for action in alarm. It can only be 'audio', 'display', or 'email.'`)
         }
         toReturn += `ACTION:${valarms[i].action.toUpperCase()}\n`
 
@@ -32,7 +32,11 @@ export function parseVAlarmArray(valarms: vAlarm[] | any){
             toReturn += `DESCRIPTION:${valarms[i].description}\n`
         }
 
-        const trigger = generateTriggerLine(valarms[i].trigger)
+        let advancedTriggerMode = false
+        if("advancedTriggerMode" in valarms[i]){
+            advancedTriggerMode = valarms[i].advancedTriggerMode
+        }
+        const trigger = generateTriggerLine(valarms[i].trigger, advancedTriggerMode)
         if(!trigger){
             throw new Error(`Invalid value '${valarms[i].trigger}' for trigger in alarm.`)
         }
@@ -85,15 +89,27 @@ export function parseVAlarmArray(valarms: vAlarm[] | any){
 
 }
 
-export function generateTriggerLine(trigger: vAlarmTrigger){
+export function generateTriggerLine(trigger: vAlarmTrigger, advancedTriggerMode: boolean){
     if(!trigger){
         throw new Error(`Invalid value 'null' for trigger in alarm.`)    
     }
-    if(!trigger.value){
-        throw new Error(`Invalid value 'null' for value in alarm. 'value' must be a number in seconds.`)    
+    if(!trigger.value &&trigger.value.toString()!="0" && trigger.value.toString()!="-0"){
+        throw new Error(`Invalid value 'null' for value in alarm. 'value' must be a number in minutes.`)    
 
     }
     let toReturn = ""
+    const valueInMinutes=parseInt(trigger.value.toString())
+    let valueString = `PT${Math.abs(valueInMinutes)}M`
+    if(valueInMinutes<0){
+        valueString=`-${valueString}`
+    }
+    if(!advancedTriggerMode ){
+        if(trigger.isRelated){
+
+            return `TRIGGER:${valueString}`
+        }
+
+    }
     if(trigger.isRelated){
         //Trigger is of related type.
 
@@ -102,20 +118,14 @@ export function generateTriggerLine(trigger: vAlarmTrigger){
         if(trigger.relatedTo.toLowerCase()!="end" && trigger.relatedTo.toLowerCase()!="start" ){
             throw new Error(`Invalid value '${trigger.relatedTo}' for relatedTo in alarm's trigger. It can be either 'start' or 'end'.`)    
         }
-        const valueInMinutes=parseInt(trigger.value.toString())/60
         if(trigger.relatedTo){
-
+    
             toReturn=`TRIGGER;RELATED=${trigger.relatedTo.toUpperCase()}:`
         }else{
             toReturn='TRIGGER:'
         }
-        const valueString = `PT${Math.abs(valueInMinutes)}M`
-        if(valueInMinutes<0){
-            toReturn+=`-${valueString}`
-        }else{
-            toReturn+=`${valueString}`
-        }
-
+        toReturn+=`${valueString}`
+       
     }else{
         // Trigger is of DateTime Type.
         toReturn=`TRIGGER:VALUE=DATE-TIME:${getISO8601Date(trigger.value)}`
@@ -124,5 +134,13 @@ export function generateTriggerLine(trigger: vAlarmTrigger){
 
     return toReturn
 
+
+}
+
+function generateTimeTrigger(trigger){
+    let toReturn=""
+ 
+
+    return toReturn
 
 }

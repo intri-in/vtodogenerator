@@ -53,6 +53,7 @@ export interface vAlarm{
     repeat?: vAlarmRepeat;
     summary?:string
     attendees?:attendeeType[]
+    simpleMode?:boolean
 }
 /**
  *
