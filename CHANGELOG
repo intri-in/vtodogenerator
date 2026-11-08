@@ -1,4 +1,8 @@
-v0.4.0
+v4.0.5
+ - - Added support for BYWEEKDAY in rrule
+ 
+  
+v4.0.0
  - Included the ability to set Alarms.
  
 v3.0.1

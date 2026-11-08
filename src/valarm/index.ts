@@ -115,7 +115,7 @@ export function generateTriggerLine(trigger: vAlarmTrigger, advancedTriggerMode:
 
         //If it has a relatedto field, it must be either 'start' or 'end'.
         // console.log("trigger.relatedTo", trigger.relatedTo, "HERE")
-        if(trigger.relatedTo.toLowerCase()!="end" && trigger.relatedTo.toLowerCase()!="start" ){
+        if(trigger.relatedTo && trigger.relatedTo.toLowerCase()!="end" && trigger.relatedTo.toLowerCase()!="start" ){
             throw new Error(`Invalid value '${trigger.relatedTo}' for relatedTo in alarm's trigger. It can be either 'start' or 'end'.`)    
         }
         if(trigger.relatedTo){

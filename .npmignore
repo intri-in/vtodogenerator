@@ -130,6 +130,7 @@ out
 
 #github
 .github/
-
+src/
+tsc
 sync.sh
 COMMITMESSAGE

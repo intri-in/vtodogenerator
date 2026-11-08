@@ -3,6 +3,7 @@ import { inputObj, optionsType, relatedToType, rruleType, vAlarm } from "./typeD
 import { isValidInput, isValidTimezone } from "./inputValidations"
 import { generateNewUID } from "./helpers"
 import { parseVAlarmArray } from "./valarm"
+import { getRRuleFromExternalLib } from "./rrule/rruleHelpers"
 
 class VTodoGenerator{
 
@@ -137,7 +138,7 @@ class VTodoGenerator{
         var finalVTODO=""
         if(skipVCALENDAR==null || skipVCALENDAR==undefined || skipVCALENDAR==false)
         {
-            finalVTODO+="BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//VTODOGENERATOR v4.0.4\n"
+            finalVTODO+="BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//VTODOGENERATOR v4.0.5\n"
 
         }
         finalVTODO +="BEGIN:VTODO\nUID:"+uid+"\n"
@@ -308,24 +309,9 @@ class VTodoGenerator{
 
 
         }
-        if(this.rrule!=null && this.rrule["FREQ"]!="" && this.rrule["FREQ"]!=null && this.rrule["INTERVAL"]!="" && this.rrule.INTERVAL!="" )
-        {
+        const rrule = getRRuleFromExternalLib(this.rrule)
+        if(rrule) finalVTODO +=rrule+"\n"
 
-            var rruleOutput="RRULE:FREQ="+this.rrule.FREQ+";INTERVAL="+this.rrule.INTERVAL
-
-            if(this.rrule.COUNT!=null )
-            {
-                rruleOutput+=";COUNT="+this.rrule.COUNT+";"
-            }
-
-            if(this.rrule.UNTIL!="" && this.rrule.UNTIL!=null)
-            {
-                rruleOutput+=";UNTIL="+this.getISO8601Date(this.rrule.UNTIL, true)
-
-            }
-            finalVTODO +=rruleOutput+"\n"
-
-        }
 
         /*
 
@@ -377,7 +363,7 @@ class VTodoGenerator{
             for(const i in this.recurrences)
             {
                 //console.log(this.recurrences[i])
-                var newVTODO = new VTodoGenerator(this.recurrences[i], {strict: this.enforceStrict})
+                var newVTODO = new VTodoGenerator(this.recurrences[i], {strict: this.enforceStrict ?? false})
                 finalVTODO += newVTODO.generate(true)
             }
            
