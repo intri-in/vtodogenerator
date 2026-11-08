@@ -36,10 +36,12 @@ export interface relatedToType{
     val:string
 }
 export interface rruleType{
-    FREQ: string,
-    INTERVAL: string | number,
+    FREQ?: string,
+    INTERVAL?: string | number,
     UNTIL?: string
-    COUNT?: number
+    COUNT?: number,
+    BYWEEKDAY?: number[]
+
 }
 
 export interface optionsType{

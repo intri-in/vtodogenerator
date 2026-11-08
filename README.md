@@ -145,9 +145,10 @@ rrule must be an object of the format:
 
 ```
 rrule: {
-    FREQ: string , //eg. DAILY/WEEKLY/MONTHLY
+   FREQ: string , //eg. DAILY/WEEKLY/MONTHLY
     INTERVAL: string/number,
     UNTIL: date of format recognised by moment.
+    BYWEEKDAY: number[] //eg. [0,1] implies that the task will repeat on Monday and Tuesday
 }
 ```
 ```FREQ``` defines the frequency of recurrence. Possible values are: "SECONDLY" / "MINUTELY" / "HOURLY" / "DAILY"/ "WEEKLY" / "MONTHLY" / "YEARLY"
@@ -155,6 +156,8 @@ rrule: {
 ```INTERVAL``` defines the interval of the recurrence. 
 
 ```UNTIL``` defines the date and time till which the recurrence rule must be followed.
+
+```BYWEEKDAY``` defines the days on which the task should repeat. Days must be in numbers, where 0 is Monday and 6 is Sunday.
 
 **Examples**
 

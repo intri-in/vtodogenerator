@@ -6,17 +6,6 @@ import { generateNewUID } from "../helpers";
 
 
 
-test('Relatedto test: Must fail if relatedto is an empty string', () => {
-    var todoData = { 
-       // due:moment("22/04/2022").toString(), 
-        summary: "Relatedto test", 
-        relatedto: "",
-        
-    }
-    
-    expect(() => new VTodoGenerator(todoData)).toThrowError()
-  });
-  
   test('Relatedto test: Must fail if relatedto.params.RELTYPE is an invalid value', () => {
     var sampleUID = generateNewUID()
     var todoData = { 

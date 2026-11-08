@@ -128,7 +128,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
+vtodogenerator-4*
 
 sync.sh
 COMMITMESSAGE

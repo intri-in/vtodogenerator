@@ -58,7 +58,7 @@ test('VALARM test', () => {
      
     let todo = new VTodoGenerator(todoData)
     const generatedTodo = todo.generate()
-    console.log(generatedTodo)
+    // console.log(generatedTodo)
     const  parsedData = ical.parseICS(generatedTodo);
     // console.log(parsedData)
 

@@ -23,10 +23,10 @@ export function isValidInput(todoObject: inputObj, enforceStrict?): boolean{
       }  
     }
 
-    if(("due" in todoObject) ){
+    if(("due" in todoObject) && todoObject.due && todoObject.due!="" ){
         
         //Check if due is a valid date.
-        var parsedDue = moment(todoObject.due)
+        let parsedDue = moment(todoObject.due)
         if(!parsedDue.isValid()){
             throw new Error("Due date must be in ISO Date format.")
         }
@@ -70,7 +70,7 @@ export function isValidInput(todoObject: inputObj, enforceStrict?): boolean{
         }
     }
     
-    if("relatedto" in todoObject){
+    if("relatedto" in todoObject && todoObject.relatedto){
         if(todoObject.relatedto==undefined){
             throw new Error("Invalid value for Relatedto.")
         }
@@ -257,21 +257,19 @@ export function isValidPriority(priority: any){
 }
 
 export function isValidRRule(rrule: any){
-    if(rrule==null || rrule==undefined){
-        throw new Error("Rrule cannot be null or undefined.")
-    }
-
+    if (!rrule) return true
     if(!("FREQ" in rrule)){
         throw new Error("Rrule.FREQ cannot be null or undefined.")
 
     }
-    if(!("INTERVAL" in rrule)){
-        throw new Error("Rrule.INTERVAL cannot be null or undefined.")
+    // if(!("INTERVAL" in rrule)){
+    //     throw new Error("Rrule.INTERVAL cannot be null or undefined.")
 
-    }
+    // }
 
-    if("UNTIL" in rrule){
+    if("UNTIL" in rrule && rrule.UNTIL){
         var parsedDate = moment(rrule.UNTIL)
+        console.log("parsedDate", parsedDate)
         if(!parsedDate.isValid()){
             throw new Error("rrule.UNTIL must be a valid date in ISO Date format.")
         }
